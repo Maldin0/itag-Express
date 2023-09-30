@@ -28,13 +28,8 @@ app.post("/users/login", async (req: Request, res: Response) => {
             usernameOrEmail: req.body.usernameOrEmail,
             password: req.body.password
         };
-        if (userData.usernameOrEmail.includes('@')) {
-            user.email = userData.usernameOrEmail;
-        } else {
-            user.username = userData.usernameOrEmail;
-        }
-        user.password = userData.password;
-
+        
+        user = new User(userData.usernameOrEmail, userData.password);
         await user.login()
             .then(() => {
     
@@ -135,7 +130,7 @@ app.post("/users/characters/add_item", async (req: Request, res: Response) => {
             .then(() => {
                 res.status(200).json({ status: "Success", message: "Item added successfully!" });
             }).catch ((err) => {
-                res.status(201).send({ status: "Fail", message: `${err}` });
+                res.status(401).send({ status: "Fail", message: `${err}` });
             })
     } catch (error) {
         res.status(500).send({ status:"Fail", message: `${error}`});
