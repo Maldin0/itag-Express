@@ -20,6 +20,10 @@ export default class User {
         this._username = value;
     }
 
+    get username(): string {
+        return this._username!;
+    } 
+
     set email(value: string) {
         this._email = value;
     }

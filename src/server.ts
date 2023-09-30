@@ -15,7 +15,7 @@ let user:User = new User();
 app.get("/users", async (req: Request, res: Response) => {
     try {
         await user.getCharacters(user.user_id)
-        res.status(200).send({ message: "Characters retrieved successfully!" });
+        res.status(200).json({ username: `${user.username}`,message: "Characters retrieved successfully!" });
     } catch (error) {
         res.status(201).send({ message: `${error}` });
     }
