@@ -29,8 +29,8 @@ export default class User {
     }
     private db: IDatabase<unknown>;
     private _user_id!: number;
-    private _username: string;
-    private _email: string;
+    private _username: string | undefined;
+    private _email: string | undefined;
     private _password: string;
     private _char : Character[]=[];
 

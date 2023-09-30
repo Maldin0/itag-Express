@@ -56,3 +56,5 @@ Content-Type: application/json
 {
     "char_id": 21
 }
+###
+GET http://localhost:8080/users/logout

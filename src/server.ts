@@ -9,7 +9,7 @@ app.use(express.json());
 
 let user:User = new User();
 
-app.get("/users", async (req, res) => {
+app.get("/users", async (req: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { user: User; message: string; }): void; new(): any; }; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
     try {
         await user.getCharacters(user.user_id)
         res.status(200).json({ user, message: "Characters retrieved successfully!" });
@@ -19,7 +19,7 @@ app.get("/users", async (req, res) => {
 });
 
 
-app.post("/users/login", async (req, res) => {
+app.post("/users/login", async (req: { body: { usernameOrEmail: any; password: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { user: User; message: string; }): void; new(): any; }; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
     try {
         const userData = {
             usernameOrEmail: req.body.usernameOrEmail,
@@ -45,7 +45,7 @@ app.post("/users/login", async (req, res) => {
 });
 
 
-app.post("/users/register", async (req, res) => {
+app.post("/users/register", async (req: { body: { username: any; email: any; password: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
     try {
         const userData = {
             username: req.body.username,
@@ -64,7 +64,7 @@ app.post("/users/register", async (req, res) => {
     }
 });
 
-app.get("/users/logout", async (req, res) => {
+app.get("/users/logout", async (req: any, res: { status: (arg0: number) => { (): any; new(): any; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
     try {
         user = new User() 
         res.status(200).send({ message: "User logged out successfully!" });
@@ -73,7 +73,7 @@ app.get("/users/logout", async (req, res) => {
     }
 });
 
-app.post("/users/characters/create", async (req, res) => { 
+app.post("/users/characters/create", async (req: { body: { race_id: any; class_id: any; name: any; background: any; dex: any; wis: any; int: any; str: any; cha: any; con: any; hp: any; gold: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { char: Character; message: string; }): void; new(): any; }; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => { 
     try {
         const charData = {
             race_id: req.body.race_id,
@@ -116,7 +116,7 @@ app.post("/users/characters/create", async (req, res) => {
     }
 });
 
-app.post("/users/characters/add_item", async (req, res) => {
+app.post("/users/characters/add_item", async (req: { body: { item_id: any; char_id: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { char: Character; message: string; }): void; new(): any; }; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
     try {
         const charData = {
             item_id: req.body.item_id,
@@ -139,7 +139,7 @@ app.post("/users/characters/add_item", async (req, res) => {
     }
 });
 
-app.post("/users/characters/remove_item", async (req, res) => {
+app.post("/users/characters/remove_item", async (req: { body: { item_id: any; char_id: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { char: Character; message: string; }): void; new(): any; }; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
     try {
         const charData = {
             item_id: req.body.item_id,
@@ -161,7 +161,7 @@ app.post("/users/characters/remove_item", async (req, res) => {
     }
 });
 
-app.post("/users/characters/set_active", async (req, res) => {
+app.post("/users/characters/set_active", async (req: { body: { char_id: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { char: Character; message: string; }): void; new(): any; }; send: { (arg0: { message: string; }): void; new(): any; }; }; }) => {
     try {
         const charData = {
             char_id: req.body.char_id
