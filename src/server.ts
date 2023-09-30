@@ -37,10 +37,10 @@ app.post("/users/login", async (req: Request, res: Response) => {
 
         await user.login()
             .then(() => {
-                
-                res.status(200).json({user, message: "User logged in successfully!" });
+    
+                res.status(200).send({status: "Success", message: "User logged in successfully!" });
             }).catch((err) => {
-                res.status(400).send({ message: `${err}`});
+                res.status(201).send({status: "Fail", message: `${err}`});
             });
     } catch (error) {
         res.status(500).send({ message: `${error}` });
@@ -60,7 +60,7 @@ app.post("/users/register", async (req: Request, res: Response) => {
             .then(() => {
                 res.status(200).send({ message: "User registered successfully!" });
             }).catch((err) => {
-                res.status(400).send({ message: `${err}`});
+                res.status(201).send({ message: `${err}`});
             });
     } catch (error) {
         res.status(500).send({ message: `${error}`});
@@ -112,7 +112,7 @@ app.post("/users/characters/create", async (req: Request, res: Response) => {
             .then(() => {
                 res.status(200).json({ char, message: "Character created successfully!" });
             }).catch((err) => {
-                res.status(400).send({ message: `${err}`});
+                res.status(201).send({ message: `${err}`});
             });
     } catch (error) {
         res.status(500).send({ message: `${error}`});
@@ -133,12 +133,12 @@ app.post("/users/characters/add_item", async (req: Request, res: Response) => {
             
         await char.getChar()
             .then(() => {
-                res.status(200).json({ char, message: "Item added successfully!" });
+                res.status(200).json({ status: "Success", message: "Item added successfully!" });
             }).catch ((err) => {
-                res.status(400).send({ message: `${err}` });
+                res.status(201).send({ status: "Fail", message: `${err}` });
             })
     } catch (error) {
-        res.status(500).send({ message: `${error}`});
+        res.status(500).send({ status:"Fail", message: `${error}`});
     }
 });
 
@@ -155,12 +155,12 @@ app.post("/users/characters/remove_item", async (req: Request, res: Response) =>
         await char.remove_item(charData.item_id)
         await char.getChar()
             .then(() => {
-                res.status(200).json({ char, message: "Item removed successfully!" });
+                res.status(200).json({ status:"Success", message: "Item removed successfully!" });
             }).catch((err) => {
-                res.status(400).send({ message: `${err}` });
+                res.status(201).send({ status:"Fail", message: `${err}` });
             });
     } catch (error) {
-        res.status(500).send({ message: `${error}` });
+        res.status(500).send({ status:"Fail", message: `${error}` });
     }
 });
 
