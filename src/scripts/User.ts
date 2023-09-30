@@ -101,6 +101,11 @@ export default class User {
                 console.error('User already exists.');
                 throw new Error('User already exists.');
             }
+            
+            if (username === '' || email === '' || password === '') { 
+                console.error('Please fill in all fields.');
+                throw new Error('Please fill in all fields.');
+            }
 
             if (
                 email.length < 5 ||                     // Minimum length of 5 characters

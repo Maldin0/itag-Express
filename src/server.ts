@@ -50,15 +50,15 @@ app.post("/users/register", async (req: Request, res: Response) => {
             email: req.body.email,
             password: req.body.password
         };
-    
+        user = new User();
         await user.regis(userData.username, userData.email, userData.password)
             .then(() => {
-                res.status(200).send({ message: "User registered successfully!" });
+                res.status(200).send({ status: "Success", message: "User registered successfully!" });
             }).catch((err) => {
-                res.status(401).send({ message: `${err}`});
+                res.status(401).send({ status: "Fail", message: `${err}` });
             });
     } catch (error) {
-        res.status(500).send({ message: `${error}`});
+        res.status(500).send({ status: "Fail", message: `${error}` });
     }
 });
 
