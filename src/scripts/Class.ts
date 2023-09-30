@@ -43,7 +43,7 @@ export default class Class {
                 const spelldata = await t.many(query, value)
                 for(const spel of spelldata)
                 {
-                    const temp = new Spell(spel.spell_name, spel.interval_time, spel.duration, spel.range, spel.details)
+                    const temp = new Spell(spel.spell_name, spel.interval_time, spel.duration, spel.range, spel.spell_detail)
                     this.spell.push(temp)
                 }
                 console.log('getspell load successfully.')
