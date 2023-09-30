@@ -5,6 +5,7 @@ import Item from "./Item";
 
 import DBConnection from "./DBConnection";
 import {IDatabase} from "pg-promise";
+import { error } from "console";
 
 
 
@@ -50,12 +51,12 @@ export default class Character {
 
     async createChar(race_id: number,class_id: number,name: string, background: string,dex: number,wis: number, int: number, str: number, cha: number, con: number, hp: number, gold: number){
         if(!this.user_id){
-            console.log('User not found.')
-            return
+            console.error('User not found.')
+            throw new Error('User not found.')
         }
         try{
             await this.db.tx(async (t)=>{
-                const query = 'insert into characters(user_id,race_id,class_id,name,background,dex,wis,int,str,cha,con,hp,is_active,gold) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, true ,$13) returning cha_id'
+                const query = 'insert into characters(user_id,race_id,class_id,name,background,dex,wis,int,str,cha,con,hp,is_active,gold) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, false ,$13) returning cha_id'
                 const value = [this.user_id,race_id, class_id, name, background,dex,wis,int,str,cha,con,hp, gold]
                 const Chadata = await t.one(query,value)
                 this.active = true;
@@ -65,13 +66,14 @@ export default class Character {
         }
         catch(error){
             console.error(error)
+            throw error;
         }
     }
 
     async getChar(){
         if(!this.user_id){
-            console.log('User not found.')
-            return
+            console.error('User not found.')
+            throw error
         }
         try{
             await this.db.tx(async (t)=>{
@@ -120,11 +122,81 @@ export default class Character {
         }
         catch(error){
             console.error(error)
+            throw error;
+        }
+    }
+    
+
+    async add_item(item_id: number) {
+        console.log(this._char_id)
+        if (!this.char_id) { 
+            console.error('Character not found.');
+            throw new Error('Character not found.');
+        }
+
+        try {
+            await this.db.tx(async (t) => {
+                const query = 'INSERT INTO inventories (cha_id, item_id) VALUES ($1, $2)';
+                const values = [this.char_id, item_id];
+
+                await t.none(query, values);
+
+                console.log('Item added successfully!');
+            });
+        } catch (error) {
+            console.error('Error adding item:', error);
+            throw error;
         }
     }
 
+    async remove_item(item_id: number) {
+        console.log(this.char_id)
+        if (!this.char_id) { 
+            console.error('Character not found.');
+            throw new Error('Character not found.');
+        }
+        try {
+            await this.db.tx(async (t) => {
+                const query = 'DELETE FROM inventories WHERE cha_id = $1 AND item_id = $2';
+                const values = [this.char_id, item_id];
+
+                await t.none(query, values);
+
+                console.log('Item removed successfully!');
+            });
+        } catch (error) {
+            console.error('Error removing item:', error);
+            throw error;
+        }
+    }
+
+
     get char_id() {
         return this._char_id
+    }
+
+    async set_active(char_id: number) {
+        if (!this.user_id) {
+            console.error('User not found.')
+            throw new Error('User not found.')
+        }
+        try {
+            this.db.tx(async (t) => {
+                const query = 'update characters set is_active = false where user_id = $1'
+                const value = [this.user_id]
+                await t.none(query, value)
+
+                const query2 = 'update characters set is_active = true where cha_id = $1'
+                const value2 = [char_id]
+                await t.none(query2, value2)
+
+                console.log('Set active successfully.')
+            })
+        }
+        catch (error) {
+            console.error(error)
+            throw error;
+        }
     }
 
     async toString() {

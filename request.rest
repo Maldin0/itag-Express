@@ -2,29 +2,6 @@ GET http://localhost:8080/users
 
 ###
 
-POST http://localhost:8080/users
-Content-Type: application/json
-
-{
-    "usernameOrEmail": "test",
-    "password": "test"
-}
-
-###
-POST http://localhost:8080/users/login
-Content-Type: application/json
-
-
-###
-POST http://localhost:8080/users/register
-Content-Type: application/json
-
-{
-    "username": "test",
-    "email": "test@test.com",
-    "password": "testtest@T1"
-}
-###
 POST http://localhost:8080/users/login
 Content-Type: application/json
 
@@ -34,9 +11,48 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/users/getChar
+
+POST http://localhost:8080/users/characters/create
 Content-Type: application/json
 
+{
+    "race_id": 1,
+    "class_id": 1,
+    "name": "test",
+    "background": "test",
+    "dex": 1,
+    "wis": 1,
+    "int": 1,
+    "str": 1,
+    "cha": 1,
+    "con": 1,
+    "hp": 1,
+    "gold": 1
+}
+
 ###
-GET http://localhost:8080/users/logout
+
+POST http://localhost:8080/users/characters/add_item
 Content-Type: application/json
+
+{
+    "char_id": 20,
+    "item_id": 1
+}
+
+
+###
+POST http://localhost:8080/users/characters/remove_item
+Content-Type: application/json
+
+{
+    "char_id": 20,
+    "item_id": 1
+}
+###
+POST http://localhost:8080/users/characters/set_active
+Content-Type: application/json
+
+{
+    "char_id": 21
+}

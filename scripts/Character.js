@@ -41,6 +41,7 @@ var Class_1 = require("./Class");
 var Skill_1 = require("./Skill");
 var Item_1 = require("./Item");
 var DBConnection_1 = require("./DBConnection");
+var console_1 = require("console");
 var Character = /** @class */ (function () {
     function Character(user_id) {
         this.skills = [];
@@ -75,8 +76,8 @@ var Character = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!this.user_id) {
-                            console.log('User not found.');
-                            return [2 /*return*/];
+                            console.error('User not found.');
+                            throw new Error('User not found.');
                         }
                         _a.label = 1;
                     case 1:
@@ -86,7 +87,7 @@ var Character = /** @class */ (function () {
                                 return __generator(this, function (_a) {
                                     switch (_a.label) {
                                         case 0:
-                                            query = 'insert into characters(user_id,race_id,class_id,name,background,dex,wis,int,str,cha,con,hp,is_active,gold) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, true ,$13) returning cha_id';
+                                            query = 'insert into characters(user_id,race_id,class_id,name,background,dex,wis,int,str,cha,con,hp,is_active,gold) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, false ,$13) returning cha_id';
                                             value = [this.user_id, race_id, class_id, name, background, dex, wis, int, str, cha, con, hp, gold];
                                             return [4 /*yield*/, t.one(query, value)];
                                         case 1:
@@ -104,7 +105,7 @@ var Character = /** @class */ (function () {
                     case 3:
                         error_1 = _a.sent();
                         console.error(error_1);
-                        return [3 /*break*/, 4];
+                        throw error_1;
                     case 4: return [2 /*return*/];
                 }
             });
@@ -118,8 +119,8 @@ var Character = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!this.user_id) {
-                            console.log('User not found.');
-                            return [2 /*return*/];
+                            console.error('User not found.');
+                            throw console_1.error;
                         }
                         _a.label = 1;
                     case 1:
@@ -194,9 +195,131 @@ var Character = /** @class */ (function () {
                     case 3:
                         error_2 = _a.sent();
                         console.error(error_2);
-                        return [3 /*break*/, 4];
+                        throw error_2;
                     case 4: return [2 /*return*/];
                 }
+            });
+        });
+    };
+    Character.prototype.add_item = function (item_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_3;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log(this._char_id);
+                        if (!this.char_id) {
+                            console.error('Character not found.');
+                            throw new Error('Character not found.');
+                        }
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.db.tx(function (t) { return __awaiter(_this, void 0, void 0, function () {
+                                var query, values;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            query = 'INSERT INTO inventories (cha_id, item_id) VALUES ($1, $2)';
+                                            values = [this.char_id, item_id];
+                                            return [4 /*yield*/, t.none(query, values)];
+                                        case 1:
+                                            _a.sent();
+                                            console.log('Item added successfully!');
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_3 = _a.sent();
+                        console.error('Error adding item:', error_3);
+                        throw error_3;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Character.prototype.remove_item = function (item_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var error_4;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log(this.char_id);
+                        if (!this.char_id) {
+                            console.error('Character not found.');
+                            throw new Error('Character not found.');
+                        }
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.db.tx(function (t) { return __awaiter(_this, void 0, void 0, function () {
+                                var query, values;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            query = 'DELETE FROM inventories WHERE cha_id = $1 AND item_id = $2';
+                                            values = [this.char_id, item_id];
+                                            return [4 /*yield*/, t.none(query, values)];
+                                        case 1:
+                                            _a.sent();
+                                            console.log('Item removed successfully!');
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_4 = _a.sent();
+                        console.error('Error removing item:', error_4);
+                        throw error_4;
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Character.prototype.set_active = function (char_id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                if (!this.user_id) {
+                    console.error('User not found.');
+                    throw new Error('User not found.');
+                }
+                try {
+                    this.db.tx(function (t) { return __awaiter(_this, void 0, void 0, function () {
+                        var query, value, query2, value2;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    query = 'update characters set is_active = false where user_id = $1';
+                                    value = [this.user_id];
+                                    return [4 /*yield*/, t.none(query, value)];
+                                case 1:
+                                    _a.sent();
+                                    query2 = 'update characters set is_active = true where cha_id = $1';
+                                    value2 = [char_id];
+                                    return [4 /*yield*/, t.none(query2, value2)];
+                                case 2:
+                                    _a.sent();
+                                    console.log('Set active successfully.');
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); });
+                }
+                catch (error) {
+                    console.error(error);
+                    throw error;
+                }
+                return [2 /*return*/];
             });
         });
     };
