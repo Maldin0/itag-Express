@@ -17,7 +17,7 @@ app.get("/users", async (req: Request, res: Response) => {
         await user.getCharacters(user.user_id)
         res.status(200).json({ username: `${user.username}`,message: "Characters retrieved successfully!" });
     } catch (error) {
-        res.status(201).send({ message: `${error}` });
+        res.status(401).send({ message: `${error}` });
     }
 });
 
@@ -28,14 +28,14 @@ app.post("/users/login", async (req: Request, res: Response) => {
             usernameOrEmail: req.body.usernameOrEmail,
             password: req.body.password
         };
-        
+
         user = new User(userData.usernameOrEmail, userData.password);
         await user.login()
             .then(() => {
     
                 res.status(200).send({status: "Success", message: "User logged in successfully!" });
             }).catch((err) => {
-                res.status(201).send({status: "Fail", message: `${err}`});
+                res.status(401).send({status: "Fail", message: `${err}`});
             });
     } catch (error) {
         res.status(500).send({ message: `${error}` });
@@ -55,7 +55,7 @@ app.post("/users/register", async (req: Request, res: Response) => {
             .then(() => {
                 res.status(200).send({ message: "User registered successfully!" });
             }).catch((err) => {
-                res.status(201).send({ message: `${err}`});
+                res.status(401).send({ message: `${err}`});
             });
     } catch (error) {
         res.status(500).send({ message: `${error}`});
@@ -107,7 +107,7 @@ app.post("/users/characters/create", async (req: Request, res: Response) => {
             .then(() => {
                 res.status(200).json({ char, message: "Character created successfully!" });
             }).catch((err) => {
-                res.status(201).send({ message: `${err}`});
+                res.status(401).send({ message: `${err}`});
             });
     } catch (error) {
         res.status(500).send({ message: `${error}`});
@@ -152,7 +152,7 @@ app.post("/users/characters/remove_item", async (req: Request, res: Response) =>
             .then(() => {
                 res.status(200).json({ status:"Success", message: "Item removed successfully!" });
             }).catch((err) => {
-                res.status(201).send({ status:"Fail", message: `${err}` });
+                res.status(401).send({ status:"Fail", message: `${err}` });
             });
     } catch (error) {
         res.status(500).send({ status:"Fail", message: `${error}` });
@@ -179,6 +179,15 @@ app.post("/users/characters/set_active", async (req: Request, res: Response) => 
         res.status(500).send({ message: `${error}` });
     }
 });
+
+app.get("/users/data", async (req: Request, res: Response) => {
+    try {
+        await user.getCharacters(user.user_id);
+        res.status(200).json({ user, message: "User data retrieved successfully!" });
+    } catch (error) {
+        res.status(401).send({ message: `${error}` });
+    }
+ });
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

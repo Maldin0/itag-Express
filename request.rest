@@ -6,7 +6,7 @@ POST http://localhost:8080/users/login
 Content-Type: application/json
 
 {
-    "usernameOrEmail": "65070051@kmitl.ac.t",
+    "usernameOrEmail": "65070051@kmitl.ac.th",
     "password": "croissantlover_123"
 }
 
@@ -58,3 +58,6 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:8080/users/logout
+
+###
+GET http://localhost:8080/users/data
