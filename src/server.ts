@@ -5,7 +5,7 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 8080; // default to 3000 if PORT is not set
+const PORT = process.env.PORT || 8080;
 const HOSTNAME = process.env.HOST || 'localhost';
 
 app.use(cors());
@@ -29,7 +29,7 @@ app.post("/users/login", async (req: Request, res: Response) => {
             usernameOrEmail: req.body.usernameOrEmail,
             password: req.body.password
         };
-
+        console.log(req.body)
         user = new User(userData.usernameOrEmail, userData.password);
         await user.login()
             .then(() => {
@@ -179,8 +179,12 @@ app.post("/users/characters/set_active", async (req: Request, res: Response) => 
 
 app.get("/users/data", async (req: Request, res: Response) => {
     try {
-        await user.getCharacters(user.user_id);
-        res.status(200).json({ user, message: "User data retrieved successfully!" });
+        const temp = new User();
+        temp.username = user.username;
+        temp.email = user.email;
+        temp.user_id = user.user_id;
+        await temp.getCharacters(user.user_id)
+        res.status(200).json({ user: temp, message: "User data retrieved successfully!" });
     } catch (error) {
         res.status(401).send({ message: `${error}` });
     }
