@@ -49,26 +49,7 @@ export default class Character {
         this.user_id = user_id;
     }
 
-    async createChar(race_id: number,class_id: number,name: string, background: string,dex: number,wis: number, int: number, str: number, cha: number, con: number, hp: number, gold: number){
-        if(!this.user_id){
-            console.error('User not found.')
-            throw new Error('User not found.')
-        }
-        try{
-            await this.db.tx(async (t)=>{
-                const query = 'insert into characters(user_id,race_id,class_id,name,background,dex,wis,int,str,cha,con,hp,is_active,gold) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, false ,$13) returning cha_id'
-                const value = [this.user_id,race_id, class_id, name, background,dex,wis,int,str,cha,con,hp, gold]
-                const Chadata = await t.one(query,value)
-                this.active = true;
-                this._char_id = Chadata.cha_id;
-                console.log('Create character successfully.')
-            })
-        }
-        catch(error){
-            console.error(error)
-            throw error;
-        }
-    }
+
 
     async getChar(){
         if(!this.user_id){

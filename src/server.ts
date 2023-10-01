@@ -38,7 +38,7 @@ app.post("/users/login", async (req: Request, res: Response) => {
                 res.status(401).send({status: "Fail", message: `${err}`});
             });
     } catch (error) {
-        res.status(500).send({ message: `${error}` });
+        res.status(500).send({ status: "Fail", message: `${error}` });
     }
 });
 
@@ -73,6 +73,7 @@ app.get("/users/logout", async (req: Request, res: Response) => {
 
 app.post("/users/characters/create", async (req: Request, res: Response) => { 
     try {
+        console.log(req.body);
         const charData = {
             race_id: req.body.race_id,
             class_id: req.body.class_id,
@@ -87,9 +88,7 @@ app.post("/users/characters/create", async (req: Request, res: Response) => {
             hp: req.body.hp,
             gold: req.body.gold
         };
-
-        let char = new Character(user.user_id);
-        await char.createChar(
+        await user.createChar(
             charData.race_id,
             charData.class_id,
             charData.name,
@@ -101,16 +100,14 @@ app.post("/users/characters/create", async (req: Request, res: Response) => {
             charData.cha,
             charData.con,
             charData.hp,
-            charData.gold)
-            
-        await char.getChar()
-            .then(() => {
-                res.status(200).json({ char, message: "Character created successfully!" });
-            }).catch((err) => {
-                res.status(401).send({ message: `${err}`});
-            });
+            charData.gold
+        ).then(() => {
+            res.status(200).send({ status: "Success", message: "Character created successfully!" });
+        }).catch((err) => {
+            res.status(401).send({ status: "Fail", message: `${err}` });
+        });
     } catch (error) {
-        res.status(500).send({ message: `${error}`});
+        res.status(500).send({ status: "Fail", message: `${error}`});
     }
 });
 
@@ -170,12 +167,12 @@ app.post("/users/characters/set_active", async (req: Request, res: Response) => 
         await char.set_active(charData.char_id)
         await char.getChar()
             .then(() => {
-                res.status(200).json({ char, message: "Character set active successfully!" });
+                res.status(200).json({status: "Fail", message: "Character set active successfully!" });
             }).catch((err) => {
-                res.status(400).send({ message: `${err}` });
+                res.status(400).send({status: "Fail", message: `${err}` });
             });
     } catch (error) {
-        res.status(500).send({ message: `${error}` });
+        res.status(500).send({status: "Fail", message: `${error}` });
     }
 });
 
