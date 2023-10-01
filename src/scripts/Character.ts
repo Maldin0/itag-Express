@@ -143,6 +143,15 @@ export default class Character {
                     console.error('Character already has the specified item.');
                     throw new Error('Character already has the specified item.');
                 }
+
+                const itemQuery = 'SELECT * FROM items WHERE item_id = $1';
+                const exists = await t.oneOrNone(itemQuery, [item_id]);
+                
+                if (!exists) {
+                    console.error('Item does not exist.');
+                    throw new Error('Item does not exist.');
+                }
+
                 const query = 'INSERT INTO inventories (cha_id, item_id) VALUES ($1, $2)';
                 const values = [this.char_id, item_id];
 
