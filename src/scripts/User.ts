@@ -186,6 +186,8 @@ export default class User {
                 console.error('User not logged in.');
                 throw new Error('User not logged in.');
             }
+
+            this._char = [];
             await this.db.tx(async (t) => {
                 const query = 'SELECT user_id, cha_id FROM characters WHERE user_id = $1';
 
@@ -227,6 +229,7 @@ export default class User {
 
         try {
             this.db.tx(async (t) => {
+        
                 const queryInven = 'delete from inventories where cha_id = $1'
                 const valueInven = [char_id]
                 await t.none(queryInven, valueInven)

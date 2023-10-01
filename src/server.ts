@@ -179,12 +179,9 @@ app.post("/users/characters/set_active", async (req: Request, res: Response) => 
 
 app.get("/users/data", async (req: Request, res: Response) => {
     try {
-        const temp = new User();
-        temp.username = user.username;
-        temp.email = user.email;
-        temp.user_id = user.user_id;
-        await temp.getCharacters(user.user_id)
-        res.status(200).json({ user: temp, message: "User data retrieved successfully!" });
+        await user.getCharacters(user.user_id)
+        console.log(user.char);
+        res.status(200).json({ user, message: "User data retrieved successfully!" });
     } catch (error) {
         res.status(401).send({ message: `${error}` });
     }
