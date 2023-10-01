@@ -213,9 +213,8 @@ export default class Character {
                 const query2 = 'update characters set is_active = true where cha_id = $1'
                 const value2 = [char_id]
                 await t.none(query2, value2)
-
-                console.log('Set active successfully.')
             })
+            console.log('Set active character successfully.')
         }
         catch (error) {
             console.error(error)
@@ -223,8 +222,9 @@ export default class Character {
         }
     }
 
+    
+
     async toString() {
-        // TODO: Convert to string
         await this.getChar()
 
         const characterInfo = `Character ID: ${this.char_id}

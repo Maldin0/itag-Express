@@ -188,6 +188,15 @@ app.get("/users/data", async (req: Request, res: Response) => {
     }
  });
 
+ app.post("/users/characters/delete", async (req: Request, res: Response) => {
+    try {
+        await user.deleteChar(req.body.char_id)
+        res.status(200).json({ status: "Success",message: "Character deleted successfully!" });
+    } catch (error) {
+        res.status(401).send({ message: `${error}` });
+    }
+ })
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

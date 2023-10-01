@@ -175,5 +175,40 @@ export default class User {
             throw error;
             }
     }
+    
+    async deleteChar(char_id: number) {
+        if (!this.user_id) {
+            console.error('User not found.')
+            throw new Error('User not found.')
+        }
+        
+         
+        const charExistsForUser = this._char.some(character => character.char_id === char_id && character.user_id === this.user_id);
+        
+        if (!charExistsForUser) {
+            console.error('Character not found for this user.');
+            throw new Error('Character not found for this user.');
+        }
+
+        try {
+            this.db.tx(async (t) => {
+                const queryInven = 'delete from inventories where cha_id = $1'
+                const valueInven = [char_id]
+                await t.none(queryInven, valueInven)
+                console.log('Delete inventory successfully.')
+
+
+                const queryChar = 'delete from characters where cha_id = $1'
+                const valueChar = [char_id]
+                await t.none(queryChar, valueChar)
+                console.log('Delete character successfully.')
+            })
+            console.log('Delete character successfully.')
+        }
+        catch (error) {
+            console.error(error)
+            throw error;
+        }
+    }
 
 }
