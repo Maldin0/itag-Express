@@ -157,10 +157,18 @@ export default class Character {
         }
         try {
             await this.db.tx(async (t) => {
-                const query = 'DELETE FROM inventories WHERE cha_id = $1 AND item_id = $2';
-                const values = [this.char_id, item_id];
+                // Check if character has the item
+                const checkQuery = 'SELECT 1 FROM inventories WHERE cha_id = $1 AND item_id = $2';
+                const checkResult = await t.oneOrNone(checkQuery, [this.char_id, item_id]);
 
-                await t.none(query, values);
+                if (!checkResult) {
+                    console.error('Character does not have the specified item.');
+                    throw new Error('Character does not have the specified item.');
+                }
+
+                // If the item exists for the character, proceed to delete
+                const deleteQuery = 'DELETE FROM inventories WHERE cha_id = $1 AND item_id = $2';
+                await t.none(deleteQuery, [this.char_id, item_id]);
 
                 console.log('Item removed successfully!');
             });

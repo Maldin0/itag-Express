@@ -36,8 +36,8 @@ POST http://localhost:8080/users/characters/add_item
 Content-Type: application/json
 
 {
-    "char_id": 20,
-    "item_id": 1
+    "char_id": 1,
+    "item_id": 2
 }
 
 
@@ -46,8 +46,8 @@ POST http://localhost:8080/users/characters/remove_item
 Content-Type: application/json
 
 {
-    "char_id": 20,
-    "item_id": 1
+    "char_id": 1,
+    "item_id": 10
 }
 ###
 POST http://localhost:8080/users/characters/set_active

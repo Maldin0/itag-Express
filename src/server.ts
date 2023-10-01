@@ -143,10 +143,9 @@ app.post("/users/characters/remove_item", async (req: Request, res: Response) =>
             item_id: req.body.item_id,
             char_id: req.body.char_id
         };
-
         const char = new Character(user.user_id);
         char.char_id = charData.char_id;
-
+        console.log(req.body);
         await char.remove_item(charData.item_id)
         await char.getChar()
             .then(() => {
