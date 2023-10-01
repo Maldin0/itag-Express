@@ -136,6 +136,13 @@ export default class Character {
 
         try {
             await this.db.tx(async (t) => {
+                const itemCheckQuery = 'SELECT 1 FROM inventories WHERE cha_id = $1 AND item_id = $2';
+                const itemExists = await t.oneOrNone(itemCheckQuery, [this.char_id, item_id]);
+
+                if (itemExists){
+                    console.error('Character already has the specified item.');
+                    throw new Error('Character already has the specified item.');
+                }
                 const query = 'INSERT INTO inventories (cha_id, item_id) VALUES ($1, $2)';
                 const values = [this.char_id, item_id];
 
